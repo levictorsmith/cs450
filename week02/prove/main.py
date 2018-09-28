@@ -4,12 +4,13 @@ from args import parse_args
 from data import Dataset
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import train_test_split
-from classifier import HardCodedClassifier, HardCodedModel
+from classifier import HardCodedClassifier, HardCodedModel, KNeighborsClassifier, KNeighborsModel
 
 def get_algorithm(algorithm):
   return {
     'hard_coded': HardCodedClassifier(),
     'naive_bayes': GaussianNB(),
+    'k_nearest': KNeighborsClassifier(3),
   }[algorithm]
 
 def get_train_test_data(filename, test_size):
