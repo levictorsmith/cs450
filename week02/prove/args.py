@@ -3,6 +3,7 @@ import argparse
 
 DEFAULT_TEST_SIZE = 0.3
 DEFAULT_ALGORITHM = 'hard_coded'
+DEFAULT_NUM_NEIGHBORS = 3
 
 def parse_args():
   # Args: 
@@ -27,5 +28,11 @@ def parse_args():
     '--test_size',
     help='Percentage of data used for testing. i.e. 0.3',
     default=DEFAULT_TEST_SIZE,
+  )
+  parser.add_argument(
+    '-k',
+    '--neighbors',
+    help='Number of neighbors',
+    default=DEFAULT_NUM_NEIGHBORS
   )
   return parser.parse_args()
