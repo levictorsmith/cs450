@@ -12,12 +12,6 @@ def parse_args():
   # -s Test size (Value 0.0 - 1.0)
   parser = argparse.ArgumentParser()
   parser.add_argument(
-    '-f',
-    '--file',
-    help='File to load data from. Valid file types: .csv, .txt',
-    default='',
-  )
-  parser.add_argument(
     '-a',
     '--algorithm',
     help='',
@@ -34,5 +28,11 @@ def parse_args():
     '--neighbors',
     help='Number of neighbors',
     default=DEFAULT_NUM_NEIGHBORS
+  )
+  parser.add_argument(
+    '-p',
+    '--preprocessor',
+    help='Data preprocessor',
+    default='',
   )
   return parser.parse_args()
