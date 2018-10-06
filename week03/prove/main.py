@@ -21,13 +21,13 @@ def get_library_version(args):
     'k_nearest': LibraryKNeighborsClassifier(int(args.neighbors))
   }[algorithm]
 
-def get_train_test_data(filename, test_size):
-  data = Dataset(filename).get_data()
+def get_train_test_data(preprocessor, test_size):
+  data = Dataset(preprocessor).get_data()
   return train_test_split(data.data, data.target, test_size=test_size)
 
 def main():
   args = parse_args()
-  data_train, data_test, target_train, target_test = get_train_test_data(filename=args.file, test_size=args.test_size)
+  data_train, data_test, target_train, target_test = get_train_test_data(preprocessor=args.preprocessor, test_size=args.test_size)
 
   classifier = get_algorithm(args)
   model = classifier.fit(data_train, target_train)
