@@ -1,0 +1,45 @@
+When your assignment is complete, please answer the questions in this text file and upload it to I-Learn.
+
+1. Please provide the URL of your public GitHub repository.
+https://github.com/levictorsmith/cs450
+
+
+2. What was the most difficult part of this assignment?
+The most difficult part was finding ways to categorize the data so that it would be represented in an effective manner.
+
+
+3. Briefly describe your process for handling non-numeric data.
+For non-numeric data, depending on the data, I would either encode it using a simple encoder(like for yes/no boolean data), use a hashing encoder, or use a label encoder to assign codes to the items.
+For useless data, I excluded it. I only did this once.
+
+
+4. Briefly describe your process for missing data.
+For missing data, I either left it NaN (if the calculation would allow it), zero it out, swap it out with a blank string, or find the mean of the column.
+
+
+5. Describe your results for the Car Evaluation dataset.
+The results of the car evaluation dataset were between 88% - 94%, depending on if K-Fold Cross validation was used or not.
+
+
+6. Describe your results for the Pima Indian dataset.
+The results of the Autism Spectrum dataset were between 94% and 99%.
+
+
+7. Describe your results for the Automobile MPG dataset.
+The results of the Automobile MPG dataset were rather confusing, I got consistently below 20% on each run. I haven't been able to diagnose what the problem is.
+
+
+8. Describe anything you did to go above and beyond the minimum standard requirements.
+
+
+9. Please select the category you feel best describes your assignment:
+A - Some attempt was made
+B - Developing, but significantly deficient
+C - Slightly deficient, but still mostly adequate
+--> D - Meets requirements
+E - Shows creativity and excels above and beyond requirements
+
+
+10. Provide a brief justification (1-2 sentences) for selecting that category.
+I implemented preprocessing the datasets and making sure missing and otherwise inadequate data were being represented correctly. I also implemented K-Fold cross validation. I did not, however, find a way to go above and beyond.
+
