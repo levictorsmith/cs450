@@ -4,7 +4,7 @@ from args import parse_args
 from data import Dataset
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier as LibraryKNeighborsClassifier
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_predict, cross_val_score, KFold
 from classifier import HardCodedClassifier, HardCodedModel, KNeighborsClassifier, KNeighborsModel
 
 def get_algorithm(args):
@@ -21,8 +21,12 @@ def get_library_version(args):
     'k_nearest': LibraryKNeighborsClassifier(int(args.neighbors))
   }[algorithm]
 
-def get_train_test_data(preprocessor, test_size):
+def get_data(preprocessor):
   data = Dataset(preprocessor).get_data()
+  return data
+
+def get_train_test_data(preprocessor, test_size):
+  data = get_data(preprocessor)
   return train_test_split(data.data, data.target, test_size=test_size)
 
 def main():
@@ -42,6 +46,12 @@ def main():
   print("Library Accuracy: {:.2%}".format(lib_correct))
 
   print("Difference from Library version: {:+.2%}".format(correct - lib_correct))
+
+  # K-Fold Cross Validation
+  data = get_data(args.preprocessor)
+  k_fold = KFold(n_splits=len(data.data), shuffle=True, random_state=7)
+  k_fold_accuracy = cross_val_score(lib_classifier, data.data, data.target, cv=k_fold, n_jobs=1, scoring='accuracy').mean()
+  print("K-Fold Accuracy: {:.2%}".format(k_fold_accuracy))
 
 if __name__ == '__main__':
   main()
