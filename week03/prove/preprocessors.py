@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import LabelBinarizer
+from sklearn.preprocessing import LabelBinarizer, LabelEncoder
+from category_encoders.hashing import HashingEncoder
+from category_encoders.backward_difference import BackwardDifferenceEncoder
 
 class Processed():
   def __init__(self):
@@ -55,18 +57,73 @@ class UCICarPreprocessor():
 
 class AutismSpectrumPreprocessor():
   def __init__(self):
-    self.url = ""
-    self.process()
-  
+    self.filename = "./autism_spectrum/Autism-Adult-Data.csv"
+    self.headers = ["A1_Score", "A2_Score", "A3_Score", "A4_Score", "A5_Score", "A6_Score", "A7_Score", "A8_Score", "A9_Score", "A10_Score", "age", "gender", "ethnicity", "jundice", "austim", "contry_of_res", "used_app_before", "result", "age_desc", "relation", "class"]
+    self.processed = Processed()
+
   def process(self):
-    print("Process")
-    pass
+    df = pd.read_csv(self.filename, names=self.headers, na_values=["?"], quotechar="'")
+    obj_df = df.copy()
+    # Process age {numeric}
+    obj_df["age"] = obj_df["age"].fillna(0)
+    # Process gender {f,m}
+    obj_df = pd.get_dummies(obj_df, columns=["gender"], prefix=["is"])
+
+    # Process ethnicity {White-European,Latino,Others,Black,Asian,'Middle Eastern ',Pasifika,'South Asian',Hispanic,Turkish,others}
+    obj_df["ethnicity"] = obj_df["ethnicity"].fillna('')
+    hee = HashingEncoder(cols=["ethnicity"])
+    hee.fit(obj_df)
+    obj_df = hee.transform(obj_df)
+
+    # Process jundice {no,yes}
+    # Process austim {no,yes}
+    # Process used_app_before {no,yes}
+    # Class/ASD {NO,YES}
+    replace_bool = {
+      "jundice": { "no": 0, "yes": 1 },
+      "austim": { "no": 0, "yes": 1 },
+      "used_app_before": { "no": 0, "yes": 1 },
+      "class": { "NO": 0, "YES": 1 },
+    }
+    obj_df.replace(replace_bool, inplace=True)
+    # Process contry_of_res {'United States',Brazil,Spain,Egypt,'New Zealand',Bahamas,Burundi,Austria,Argentina,Jordan,Ireland,'United Arab Emirates',Afghanistan,Lebanon,'United Kingdom','South Africa',Italy,Pakistan,Bangladesh,Chile,France,China,Australia,Canada,'Saudi Arabia',Netherlands,Romania,Sweden,Tonga,Oman,India,Philippines,'Sri Lanka','Sierra Leone',Ethiopia,'Viet Nam',Iran,'Costa Rica',Germany,Mexico,Russia,Armenia,Iceland,Nicaragua,'Hong Kong',Japan,Ukraine,Kazakhstan,AmericanSamoa,Uruguay,Serbia,Portugal,Malaysia,Ecuador,Niger,Belgium,Bolivia,Aruba,Finland,Turkey,Nepal,Indonesia,Angola,Azerbaijan,Iraq,'Czech Republic',Cyprus}
+    obj_df["contry_of_res"] = obj_df["contry_of_res"].fillna('')
+    hec = HashingEncoder(cols=["contry_of_res"])
+    hec.fit(obj_df)
+    obj_df = hec.transform(obj_df)
+
+    # Process age_desc {'18 and more'}
+    obj_df.drop(columns=["age_desc"], inplace=True)
+
+    # Process relation {Self,Parent,'Health care professional',Relative,Others}
+    obj_df["relation"] = obj_df["relation"].fillna('')
+    lb_relation = LabelEncoder()
+    obj_df["relation"] = lb_relation.fit_transform(obj_df["relation"])
+
+    self.processed.data = obj_df.values
+    self.processed.target = np.array(obj_df["class"])
+    self.processed.target_names = np.array(df["class"].unique())
+    return self.processed
 
 class AutomobileMPGPreprocessor():
   def __init__(self):
-    self.filename = ""
-    self.process()
+    self.url = "https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data"
+    self.headers = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "model_year", "origin", "car_name"]
+    self.processed = Processed()
   
   def process(self):
-    print("Process")
-    pass
+    df = pd.read_csv(self.url, names=self.headers, na_values=["?"], quotechar="\"", delim_whitespace=True)
+    obj_df = df.copy()
+    # Process mpg
+    obj_df['mpg'] = obj_df['mpg'].astype(int)
+
+    # Process horsepower
+    obj_df["horsepower"] = obj_df['horsepower'].fillna(obj_df["horsepower"].mean())
+
+    # Process car name
+    obj_df.drop(columns=["car_name"], inplace=True)
+
+    self.processed.data = obj_df.values
+    self.processed.target = np.array(obj_df["mpg"])
+    self.processed.target_names = np.array(obj_df["mpg"].unique())
+    return self.processed
