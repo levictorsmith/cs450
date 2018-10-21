@@ -1,0 +1,41 @@
+When your assignment is complete, please answer the questions in this text file and upload it to I-Learn.
+
+
+1. Please provide a link to your classifier in your public GitHub repo.
+https://github.com/levictorsmith/cs450/tree/master/week04/prove
+
+
+2. Briefly describe your overall approach to the task and highlight the most difficult part of this assignment.
+My overall approach was to keep the data in a pandas DataFrame in order for easy selection of data, 
+so when it came to passing down the data to children, I could just selection the pertinent rows from 
+the already available rows.
+
+I also had a Node class that had a value as well as a dictionary of children which were key value pairs of 
+feature values and nodes, respectively.
+
+
+3. Describe the dataset that you used.
+I used the "Lenses" dataset. I chose this in order to get started since the data was mostly, if not all categorical.
+My intention was to use it just to get things started, then I could try manipulating a different dataset in order to
+make continuous data categorical. However, because of time constraints, I was not able to do that.
+
+
+4. Describe your results on this dataset. (e.g., What was the size of the tree? How did your implementation compare to existing implementations? How did your decision tree compare to your kNN classifier)
+Since I was not able to implement the traversal function (predict), I was not able to get any prediction results back.
+
+
+
+5. If applicable, please describe anything you did to go above and beyond and the results you saw.
+
+
+6. Please select the category you feel best describes your assignment:
+A - Some attempt was made
+B - Developing, but significantly deficient
+-> C - Slightly deficient, but still mostly adequate
+D - Meets requirements
+E - Shows creativity and excels above and beyond requirements
+
+7. Provide a brief justification (1-2 sentences) for selecting that category.
+I feel that because I was able to at least create the tree, I was mostly there. The traversal function wouldn't
+be to hard to implement, in my opinion, but I'm definitely behind the mark because I don't have any actual results to show.
+
