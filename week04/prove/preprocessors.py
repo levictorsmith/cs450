@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from sklearn import datasets
 from sklearn.preprocessing import LabelBinarizer, LabelEncoder
 from category_encoders.hashing import HashingEncoder
 from category_encoders.backward_difference import BackwardDifferenceEncoder
@@ -127,3 +128,21 @@ class AutomobileMPGPreprocessor():
     self.processed.target = np.array(obj_df["mpg"])
     self.processed.target_names = np.array(obj_df["mpg"].unique())
     return self.processed
+
+class LensesPreprocessor():
+  def __init__(self):
+    self.url = "https://archive.ics.uci.edu/ml/machine-learning-databases/lenses/lenses.data"
+    self.headers = ["age", "prescription", "astigmatic", "tear_rate", "class"]
+    self.processed = Processed()
+
+  def process(self):
+    # TODO: Discretize the columns into categories
+    df = pd.read_csv(self.url, names=self.headers, delim_whitespace=True)
+    copied = df.copy()
+    copied.drop(columns=["class"], inplace=True)
+    self.processed.data = copied.values
+    self.processed.target = np.array(df["class"])
+    self.processed.target_names = np.array(df["class"].unique())
+    self.processed.feature_names = ["age", "prescription", "astigmatic", "tear_rate"]
+    return self.processed
+

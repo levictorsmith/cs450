@@ -4,8 +4,9 @@ from args import parse_args
 from data import Dataset
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier as LibraryKNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier as LibraryDecisionTreeClassifier
 from sklearn.model_selection import train_test_split, cross_val_predict, cross_val_score, KFold
-from classifier import HardCodedClassifier, HardCodedModel, KNeighborsClassifier, KNeighborsModel
+from classifier import HardCodedClassifier, HardCodedModel, KNeighborsClassifier, KNeighborsModel, DecisionTreeClassifier, DecisionTreeModel
 
 def get_algorithm(args):
   algorithm = args.algorithm
@@ -13,12 +14,14 @@ def get_algorithm(args):
     'hard_coded': HardCodedClassifier(),
     'naive_bayes': GaussianNB(),
     'k_nearest': KNeighborsClassifier(int(args.neighbors)),
+    'decision_tree': DecisionTreeClassifier(),
   }[algorithm]
 
 def get_library_version(args):
   algorithm = args.algorithm
   return {
-    'k_nearest': LibraryKNeighborsClassifier(int(args.neighbors))
+    'k_nearest': LibraryKNeighborsClassifier(int(args.neighbors)),
+    'decision_tree': LibraryDecisionTreeClassifier(),
   }[algorithm]
 
 def get_data(preprocessor):
@@ -34,7 +37,8 @@ def main():
   data_train, data_test, target_train, target_test = get_train_test_data(preprocessor=args.preprocessor, test_size=args.test_size)
 
   classifier = get_algorithm(args)
-  model = classifier.fit(data_train, target_train)
+  temp = get_data(args.preprocessor)
+  model = classifier.fit(data_train, target_train, temp.feature_names)
   targets_predicted = model.predict(data_test)
   correct = 1 - np.mean(target_test != targets_predicted)
   print("Accuracy: {:.2%}".format(correct))

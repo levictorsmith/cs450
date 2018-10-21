@@ -26,6 +26,7 @@ class Dataset():
       'UCICar': preprocessors.UCICarPreprocessor,
       'AutismSpectrum': preprocessors.AutismSpectrumPreprocessor,
       'AutomobileMPG': preprocessors.AutomobileMPGPreprocessor,
+      'lenses': preprocessors.LensesPreprocessor,
     }[self.preprocessor]()
   
   def get_data(self):
